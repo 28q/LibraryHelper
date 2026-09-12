@@ -8,8 +8,7 @@
 *{box-sizing:border-box}
 :root{
   font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
-  color:#18181b;
-  background:#f4f4f5;
+  color:#18181b;background:#f4f4f5;
 }
 body{margin:0}
 button,input,textarea{font:inherit}
@@ -19,117 +18,63 @@ button,input,textarea{font:inherit}
   min-height:100vh;
 }
 .panel{
-  padding:20px;
-  background:white;
-  border-right:1px solid #ddd;
-  overflow:auto;
-  height:100vh;
-  position:sticky;
-  top:0;
+  padding:20px;background:white;border-right:1px solid #ddd;
+  overflow:auto;height:100vh;position:sticky;top:0;
 }
 .panel h1{font-size:20px;margin:0 0 18px}
 label{
-  display:block;
-  font-size:12px;
-  font-weight:700;
+  display:block;font-size:12px;font-weight:700;
   margin:14px 0 5px;
 }
 input,textarea{
-  width:100%;
-  border:1px solid #ccc;
-  border-radius:6px;
-  padding:8px;
+  width:100%;border:1px solid #ccc;border-radius:6px;padding:8px;
 }
 textarea{
   resize:vertical;
   font-family:ui-monospace,SFMono-Regular,Consolas,"Liberation Mono",monospace;
-  font-size:12px;
-  line-height:1.45;
-  tab-size:4;
+  font-size:12px;line-height:1.45;tab-size:4;
 }
 #description{min-height:100px}
 #source{min-height:310px}
-#candidate{min-height:220px}
+#cppHash{min-height:340px;background:#fafafa}
 .row{display:flex;gap:8px;align-items:end}
 .row>div{flex:1}
 button{
-  border:1px solid #bbb;
-  background:#fafafa;
-  border-radius:6px;
-  padding:8px 12px;
-  cursor:pointer;
+  border:1px solid #bbb;background:#fafafa;
+  border-radius:6px;padding:8px 12px;cursor:pointer;
 }
 button:hover{background:#eee}
-.primary{
-  background:#18181b;
-  color:white;
-  border-color:#18181b;
-}
+.primary{background:#18181b;color:white;border-color:#18181b}
 .primary:hover{background:#333}
-.buttons{
-  display:flex;
-  gap:8px;
-  margin-top:15px;
-}
-.result{
-  margin-top:12px;
-  border-radius:6px;
-  padding:10px;
-  font-size:13px;
-  white-space:pre-wrap;
-  border:1px solid #ddd;
-}
-.ok{background:#ecfdf5;border-color:#86efac}
-.ng{background:#fef2f2;border-color:#fca5a5}
+.buttons{display:flex;gap:8px;margin-top:15px}
 .preview-wrap{padding:25px;overflow:auto}
 .sheet{
-  width:210mm;
-  min-height:297mm;
-  margin:auto;
-  background:white;
-  box-shadow:0 2px 14px #0002;
-  padding:10mm;
+  width:210mm;min-height:297mm;margin:auto;background:white;
+  box-shadow:0 2px 14px #0002;padding:10mm;
 }
-.print-title{
-  font-size:20pt;
-  margin:0 0 3mm;
-}
+.print-title{font-size:20pt;margin:0 0 3mm}
 .meta{
   font-family:ui-monospace,monospace;
-  font-size:8pt;
-  color:#555;
-  margin-bottom:5mm;
+  font-size:8pt;color:#555;margin-bottom:5mm;
 }
 .description{
-  white-space:pre-wrap;
-  font-size:9.5pt;
-  line-height:1.55;
-  margin-bottom:6mm;
+  white-space:pre-wrap;font-size:9.5pt;
+  line-height:1.55;margin-bottom:6mm;
 }
 .code-block{
   border-top:1px solid #bbb;
-  margin:0;
-  padding:1.2mm 0 1.8mm;
+  margin:0;padding:1.2mm 0 1.8mm;
   break-inside:avoid;
 }
 .block-head{
   font-family:ui-monospace,SFMono-Regular,Consolas,monospace;
-  display:flex;
-  justify-content:space-between;
-  gap:8px;
-  font-size:7pt;
-  color:#555;
-  margin-bottom:.8mm;
+  display:flex;justify-content:space-between;gap:8px;
+  font-size:7pt;color:#555;margin-bottom:.8mm;
 }
-.hash{
-  white-space:nowrap;
-  font-weight:700;
-}
+.hash{white-space:nowrap;font-weight:700}
 .lines{
   font-family:ui-monospace,SFMono-Regular,Consolas,"Liberation Mono",monospace;
-  font-size:8pt;
-  line-height:1.32;
-  tab-size:4;
+  font-size:8pt;line-height:1.32;tab-size:4;
 }
 .code-line{
   display:grid;
@@ -137,21 +82,32 @@ button:hover{background:#eee}
   min-height:1.32em;
 }
 .ln{
-  text-align:right;
-  padding-right:1em;
-  color:#999;
-  user-select:none;
+  text-align:right;padding-right:1em;
+  color:#999;user-select:none;
 }
-.src{
-  white-space:pre;
-  overflow:visible;
+.src{white-space:pre;overflow:visible}
+
+.hash-program{
+  margin-top:9mm;
+  break-before:page;
 }
-.code-block.bad{
-  background:#fff1f2;
+.hash-program h2{
+  font-size:15pt;
+  margin:0 0 2mm;
 }
-.code-block.good{
-  background:#f0fdf4;
+.hash-program-desc{
+  font-size:8.5pt;
+  margin-bottom:3mm;
 }
+.hash-code{
+  font-family:ui-monospace,SFMono-Regular,Consolas,"Liberation Mono",monospace;
+  white-space:pre-wrap;
+  font-size:7.2pt;
+  line-height:1.28;
+  border:1px solid #bbb;
+  padding:3mm;
+}
+
 @page{
   size:A4 portrait;
   margin:8mm;
@@ -162,21 +118,13 @@ button:hover{background:#eee}
   .app{display:block}
   .preview-wrap{padding:0}
   .sheet{
-    width:auto;
-    min-height:0;
-    margin:0;
-    padding:0;
-    box-shadow:none;
+    width:auto;min-height:0;margin:0;padding:0;box-shadow:none;
   }
-  .code-block.good,.code-block.bad{background:white}
 }
 @media(max-width:900px){
   .app{display:block}
   .panel{
-    height:auto;
-    position:static;
-    border-right:0;
-    border-bottom:1px solid #ddd;
+    height:auto;position:static;border-right:0;border-bottom:1px solid #ddd;
   }
 }
 </style>
@@ -213,14 +161,11 @@ button:hover{background:#eee}
     <div class="buttons">
       <button id="update">更新</button>
       <button class="primary" id="print">印刷 / PDF</button>
+      <button id="copyCpp">C++をコピー</button>
     </div>
 
-    <label>写経後コード</label>
-    <textarea id="candidate"
-      spellcheck="false"
-      placeholder="写経したコードを貼ると比較します"></textarea>
-
-    <div id="result" class="result">コードを入力してください。</div>
+    <label>C++ ハッシュ確認コード</label>
+    <textarea id="cppHash" readonly spellcheck="false"></textarea>
   </aside>
 
   <main class="preview-wrap">
@@ -237,40 +182,40 @@ const els={
   title:$("title"),
   description:$("description"),
   source:$("source"),
-  candidate:$("candidate"),
   blockSize:$("blockSize"),
   fontSize:$("fontSize"),
+  cppHash:$("cppHash"),
   update:$("update"),
   print:$("print"),
-  sheet:$("sheet"),
-  result:$("result")
+  copyCpp:$("copyCpp"),
+  sheet:$("sheet")
 };
 
-function normalizeWhitespace(s){
-  return s.replace(/\s/gu,"");
+const encoder=new TextEncoder();
+
+function isAsciiWhitespace(c){
+  return c===" "||c==="\t"||c==="\n"||
+         c==="\r"||c==="\v"||c==="\f";
 }
 
-function fnv1a(s){
-  let h=0x811c9dc5;
-  for(let i=0;i<s.length;i++){
-    const c=s.charCodeAt(i);
-    h^=c&255;
-    h=Math.imul(h,0x01000193);
-    h^=c>>>8;
-    h=Math.imul(h,0x01000193);
-  }
-  return h>>>0;
+function normalizeWhitespace(s){
+  let r="";
+  for(const c of s)
+    if(!isAsciiWhitespace(c))r+=c;
+  return r;
 }
 
 function fnvUpdate(h,s){
-  for(let i=0;i<s.length;i++){
-    const c=s.charCodeAt(i);
-    h^=c&255;
-    h=Math.imul(h,0x01000193);
-    h^=c>>>8;
+  const bytes=encoder.encode(s);
+  for(const b of bytes){
+    h^=b;
     h=Math.imul(h,0x01000193);
   }
   return h>>>0;
+}
+
+function fnv1a(s){
+  return fnvUpdate(0x811c9dc5,s);
 }
 
 function hex(x){
@@ -292,28 +237,21 @@ function splitLines(s){
 function analyze(code,blockSize){
   const lines=splitLines(code);
   const blocks=[];
-
   let prefixHash=0x811c9dc5;
-  let charOffset=0;
 
   for(let i=0;i<lines.length;i+=blockSize){
     const part=lines.slice(i,i+blockSize);
     const normalized=normalizeWhitespace(part.join("\n"));
 
+    const blockHash=fnv1a(normalized);
     prefixHash=fnvUpdate(prefixHash,normalized);
-
-    const startOffset=charOffset;
-    charOffset+=normalized.length;
 
     blocks.push({
       begin:i+1,
       end:i+part.length,
       lines:part,
       normalized,
-      length:normalized.length,
-      startOffset,
-      endOffset:charOffset,
-      blockHash:fnv1a(normalized),
+      blockHash,
       prefixHash
     });
   }
@@ -328,20 +266,118 @@ function analyze(code,blockSize){
   };
 }
 
-function compare(sourceInfo,candidate){
-  const c=normalizeWhitespace(candidate);
+function makeCppHashCode(blockSize){
+return `#include <bits/stdc++.h>
+using namespace std;
 
-  return {
-    exact:c===sourceInfo.normalized,
-    candidateNormalized:c,
-    blocks:sourceInfo.blocks.map(b=>{
-      const x=c.slice(b.startOffset,b.endOffset);
-      return {
-        ok:x===b.normalized,
-        hash:fnv1a(x)
-      };
-    })
-  };
+using u32 = uint32_t;
+
+static constexpr int BLOCK = ${blockSize};
+static constexpr u32 FNV_OFFSET = 0x811C9DC5u;
+static constexpr u32 FNV_PRIME  = 0x01000193u;
+
+static inline bool is_ws(unsigned char c){
+    return c==' ' || c=='\\\\t' || c=='\\\\n' ||
+           c=='\\\\r' || c=='\\\\v' || c=='\\\\f';
+}
+
+static inline void fnv_add(u32& h,unsigned char c){
+    h^=c;
+    h*=FNV_PRIME;
+}
+
+static string hex8(u32 x){
+    static const char d[]="0123456789ABCDEF";
+    string s(8,'0');
+    for(int i=7;i>=0;--i){
+        s[i]=d[x&15];
+        x>>=4;
+    }
+    return s;
+}
+
+int main(){
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    string src(
+        (istreambuf_iterator<char>(cin)),
+        istreambuf_iterator<char>()
+    );
+
+    // CRLF / CR を LF に統一
+    string s;
+    s.reserve(src.size());
+
+    for(size_t i=0;i<src.size();++i){
+        if(src[i]=='\\\\r'){
+            if(i+1<src.size() && src[i+1]=='\\\\n') ++i;
+            s.push_back('\\\\n');
+        }else{
+            s.push_back(src[i]);
+        }
+    }
+
+    // JS の split("\\\\n") と同じように、末尾空行も保持
+    vector<string> lines;
+
+    if(!s.empty()){
+        size_t p=0;
+        while(true){
+            size_t q=s.find('\\\\n',p);
+
+            if(q==string::npos){
+                lines.emplace_back(s.substr(p));
+                break;
+            }
+
+            lines.emplace_back(s.substr(p,q-p));
+            p=q+1;
+
+            if(p==s.size()){
+                lines.emplace_back("");
+                break;
+            }
+        }
+    }
+
+    u32 prefix=FNV_OFFSET;
+    u32 full=FNV_OFFSET;
+
+    size_t normalized_chars=0;
+
+    for(int base=0;base<(int)lines.size();base+=BLOCK){
+        u32 block=FNV_OFFSET;
+
+        int end=min<int>(base+BLOCK,lines.size());
+
+        for(int i=base;i<end;++i){
+            for(unsigned char c:lines[i]){
+                if(is_ws(c)) continue;
+
+                fnv_add(block,c);
+                fnv_add(prefix,c);
+
+                ++normalized_chars;
+            }
+        }
+
+        cout
+            <<"lines "<<base+1<<"-"<<end
+            <<"  B:"<<hex8(block)
+            <<"  P:"<<hex8(prefix)
+            <<"\\\\n";
+    }
+
+    for(unsigned char c:src){
+        if(is_ws(c)) continue;
+        fnv_add(full,c);
+    }
+
+    cout<<"\\\\n";
+    cout<<"HASH: "<<hex8(full)<<"\\\\n";
+    cout<<"normalized bytes: "<<normalized_chars<<"\\\\n";
+}`;
 }
 
 function render(){
@@ -350,15 +386,19 @@ function render(){
   const fontSize=Math.max(5,+els.fontSize.value||8);
 
   const info=analyze(source,blockSize);
-  const hasCandidate=els.candidate.value.length>0;
-  const cmp=compare(info,els.candidate.value);
+  const cppCode=makeCppHashCode(blockSize);
+
+  els.cppHash.value=cppCode;
 
   let html=`
     <h1 class="print-title">${escapeHTML(els.title.value||"Library")}</h1>
+
     <div class="meta">
       lines: ${info.lines.length}
-      &nbsp; normalized chars: ${info.normalized.length}
-      &nbsp; HASH: ${hex(info.fullHash)}
+      &nbsp;
+      normalized bytes: ${encoder.encode(info.normalized).length}
+      &nbsp;
+      HASH: ${hex(info.fullHash)}
     </div>
   `;
 
@@ -370,15 +410,9 @@ function render(){
     `;
   }
 
-  html+=`<section class="code" style="--code-size:${fontSize}pt">`;
-
-  info.blocks.forEach((b,bi)=>{
-    const state=hasCandidate
-      ?(cmp.blocks[bi].ok?" good":" bad")
-      :"";
-
+  info.blocks.forEach(b=>{
     html+=`
-      <section class="code-block${state}">
+      <section class="code-block">
         <div class="block-head">
           <span>lines ${b.begin}-${b.end}</span>
           <span class="hash">
@@ -387,6 +421,7 @@ function render(){
             P:${hex(b.prefixHash)}
           </span>
         </div>
+
         <div class="lines" style="font-size:${fontSize}pt">
     `;
 
@@ -405,63 +440,28 @@ function render(){
     `;
   });
 
-  html+="</section>";
+  html+=`
+    <section class="hash-program">
+      <h2>Hash Checker (C++)</h2>
+
+      <div class="hash-program-desc">
+        標準入力から写経したコードを読み込み、
+        ASCII空白を無視して ${blockSize} 行ごとの B / P ハッシュを計算する。
+      </div>
+
+      <pre class="hash-code">${escapeHTML(cppCode)}</pre>
+    </section>
+  `;
 
   els.sheet.innerHTML=html;
 
-  renderResult(info,cmp,hasCandidate);
   save();
-}
-
-function renderResult(info,cmp,hasCandidate){
-  if(!els.source.value){
-    els.result.className="result";
-    els.result.textContent="元コードを入力してください。";
-    return;
-  }
-
-  if(!hasCandidate){
-    els.result.className="result";
-    els.result.textContent=
-      `全体 HASH: ${hex(info.fullHash)}\n`+
-      `空白除去後: ${info.normalized.length} 文字`;
-    return;
-  }
-
-  if(cmp.exact){
-    els.result.className="result ok";
-    els.result.textContent=
-      "✓ 完全一致\n"+
-      "スペース・タブ・改行などの空白をすべて無視して一致しています。\n"+
-      `HASH: ${hex(info.fullHash)}`;
-    return;
-  }
-
-  const first=cmp.blocks.findIndex(x=>!x.ok);
-
-  els.result.className="result ng";
-
-  let msg="✗ 不一致\n";
-
-  if(first>=0){
-    const b=info.blocks[first];
-    msg+=`最初の不一致候補: ${b.begin}-${b.end} 行付近\n`;
-    msg+=`期待 B: ${hex(b.blockHash)}\n`;
-    msg+=`写経 B: ${hex(cmp.blocks[first].hash)}\n`;
-  }
-
-  msg+=
-    `元: ${info.normalized.length} chars\n`+
-    `写経: ${cmp.candidateNormalized.length} chars`;
-
-  els.result.textContent=msg;
 }
 
 const stateKeys=[
   "title",
   "description",
   "source",
-  "candidate",
   "blockSize",
   "fontSize"
 ];
@@ -478,6 +478,7 @@ function load(){
       localStorage.getItem("library-copybook")
     );
     if(!obj)return;
+
     for(const k of stateKeys){
       if(obj[k]!=null)els[k].value=obj[k];
     }
@@ -491,14 +492,32 @@ function lazyRender(){
   timer=setTimeout(render,100);
 }
 
-for(const k of stateKeys){
+for(const k of stateKeys)
   els[k].addEventListener("input",lazyRender);
-}
 
 els.update.onclick=render;
+
 els.print.onclick=()=>{
   render();
   window.print();
+};
+
+els.copyCpp.onclick=async()=>{
+  render();
+
+  try{
+    await navigator.clipboard.writeText(els.cppHash.value);
+
+    const old=els.copyCpp.textContent;
+    els.copyCpp.textContent="コピーしました";
+
+    setTimeout(()=>{
+      els.copyCpp.textContent=old;
+    },1000);
+  }catch{
+    els.cppHash.select();
+    document.execCommand("copy");
+  }
 };
 
 load();
