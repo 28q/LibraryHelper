@@ -70,12 +70,12 @@ textarea{
     "Liberation Mono",
     monospace;
   font-size:12px;
-  line-height:1.45;
+  line-height:1.35;
   tab-size:4;
 }
 
 #description{
-  min-height:100px;
+  min-height:90px;
 }
 
 #source{
@@ -83,7 +83,7 @@ textarea{
 }
 
 #cppHash{
-  min-height:330px;
+  min-height:300px;
   background:#fafafa;
 }
 
@@ -141,12 +141,12 @@ button:hover{
   margin:auto;
   background:#fff;
   box-shadow:0 2px 14px #0002;
-  padding:10mm;
+  padding:8mm;
 }
 
 .print-title{
-  font-size:20pt;
-  margin:0 0 3mm;
+  font-size:18pt;
+  margin:0 0 2mm;
 }
 
 .meta{
@@ -155,16 +155,17 @@ button:hover{
     SFMono-Regular,
     Consolas,
     monospace;
-  font-size:8pt;
+  font-size:7pt;
+  line-height:1.1;
   color:#555;
-  margin-bottom:5mm;
+  margin-bottom:3mm;
 }
 
 .description{
   white-space:pre-wrap;
-  font-size:9.5pt;
-  line-height:1.55;
-  margin-bottom:6mm;
+  font-size:8.5pt;
+  line-height:1.3;
+  margin-bottom:3mm;
 }
 
 /* ==============================
@@ -174,14 +175,14 @@ button:hover{
 .code-block{
   border-top:1px solid #bbb;
   margin:0;
-  padding:1.2mm 0 1.8mm;
+  padding:.45mm 0 .65mm;
   break-inside:avoid;
 }
 
 .block-head{
   display:flex;
   justify-content:space-between;
-  gap:8px;
+  gap:6px;
 
   font-family:
     ui-monospace,
@@ -189,9 +190,10 @@ button:hover{
     Consolas,
     monospace;
 
-  font-size:7pt;
+  font-size:6.3pt;
+  line-height:1.05;
   color:#555;
-  margin-bottom:.8mm;
+  margin-bottom:.2mm;
 }
 
 .hash{
@@ -207,19 +209,19 @@ button:hover{
     "Liberation Mono",
     monospace;
 
-  line-height:1.32;
+  line-height:1.08;
   tab-size:4;
 }
 
 .code-line{
   display:grid;
-  grid-template-columns:4.5em 1fr;
-  min-height:1.32em;
+  grid-template-columns:4em 1fr;
+  min-height:1.08em;
 }
 
 .ln{
   text-align:right;
-  padding-right:1em;
+  padding-right:.7em;
   color:#999;
   user-select:none;
 }
@@ -234,20 +236,20 @@ button:hover{
    ============================== */
 
 #hashPrint{
-  margin-top:16mm;
-  padding-top:8mm;
+  margin-top:10mm;
+  padding-top:5mm;
   border-top:2px solid #ddd;
 }
 
 .hash-desc{
-  font-size:9pt;
-  line-height:1.5;
-  margin-bottom:4mm;
+  font-size:8pt;
+  line-height:1.25;
+  margin-bottom:2mm;
 }
 
 .hash-code{
   margin:0;
-  padding:3mm;
+  padding:2mm;
   border:1px solid #bbb;
   background:#fafafa;
 
@@ -258,8 +260,8 @@ button:hover{
     "Liberation Mono",
     monospace;
 
-  font-size:7.4pt;
-  line-height:1.3;
+  font-size:7pt;
+  line-height:1.12;
   white-space:pre-wrap;
 }
 
@@ -269,7 +271,7 @@ button:hover{
 
 @page{
   size:A4 portrait;
-  margin:8mm;
+  margin:6mm;
 }
 
 @media print{
@@ -372,7 +374,7 @@ button:hover{
           min="5"
           max="14"
           step=".25"
-          value="8"
+          value="7.5"
         >
       </div>
 
@@ -464,10 +466,6 @@ const els={
 
 const encoder=new TextEncoder();
 
-/* ============================================
-   Hash
-   ============================================ */
-
 const FNV_OFFSET=2166136261;
 const FNV_PRIME=16777619;
 
@@ -514,10 +512,6 @@ function hex(x){
     .padStart(8,"0");
 }
 
-/* ============================================
-   String utilities
-   ============================================ */
-
 function escapeHTML(s){
   return s
     .replaceAll("&","&amp;")
@@ -534,10 +528,6 @@ function splitLines(s){
   return s.split("\n");
 }
 
-/* ============================================
-   Analyze source
-   ============================================ */
-
 function analyze(code,K){
 
   const lines=splitLines(code);
@@ -548,11 +538,6 @@ function analyze(code,K){
   for(let i=0;i<lines.length;i+=K){
 
     const part=lines.slice(i,i+K);
-
-    /*
-      改行自体は空白として無視されるため、
-      join("") でも join("\n") でも同じ結果。
-    */
     const s=normalize(part.join(""));
 
     const blockHash=hash(s);
@@ -579,50 +564,29 @@ function analyze(code,K){
   };
 }
 
-/* ============================================
-   C++ Hash Checker
-   ============================================ */
-
 function makeCppHashCode(K){
 
 return `#include <bits/stdc++.h>
 using namespace std;
 using u32=uint32_t;
-
 int main(){
     constexpr int K=${K};
     constexpr u32 O=2166136261u,P=16777619u;
-
     u32 h=O,b=O;
     string s;
     int n=0,l=1;
-
-    auto add=[&](u32& x,unsigned char c){
-        x=(x^c)*P;
-    };
-
+    auto add=[&](u32& x,unsigned char c){x=(x^c)*P;};
     while(getline(cin,s)){
         ++n;
-
-        for(unsigned char c:s)
-            if(!isspace(c))
-                add(h,c),add(b,c);
-
+        for(unsigned char c:s)if(!isspace(c))add(h,c),add(b,c);
         if(n%K==0){
-            printf("%d-%d B:%08X P:%08X\\n",l,n,b,h);
-            l=n+1;
-            b=O;
+            printf("%d-%d B:%08X P:%08X\\\\n",l,n,b,h);
+            l=n+1,b=O;
         }
     }
-
-    if(n%K)
-        printf("%d-%d B:%08X P:%08X\\n",l,n,b,h);
+    if(n%K)printf("%d-%d B:%08X P:%08X\\\\n",l,n,b,h);
 }`;
 }
-
-/* ============================================
-   Rendering
-   ============================================ */
 
 function render(){
 
@@ -640,21 +604,16 @@ function render(){
     5,
     Math.min(
       14,
-      Number(els.fontSize.value)||8
+      Number(els.fontSize.value)||7.5
     )
   );
 
   const info=analyze(source,K);
-
   const cpp=makeCppHashCode(K);
 
   els.cppHash.value=cpp;
 
   let html="";
-
-  /* ==========================================
-     Library printable area
-     ========================================== */
 
   html+=`
 <section id="sourcePrint">
@@ -731,10 +690,6 @@ ${b.begin+i}
 </section>
 `;
 
-  /* ==========================================
-     Hash checker printable area
-     ========================================== */
-
   html+=`
 <section id="hashPrint">
 
@@ -761,10 +716,6 @@ P = 先頭からその区間まで。
 
   save();
 }
-
-/* ============================================
-   Local storage
-   ============================================ */
 
 const stateKeys=[
   "title",
@@ -809,10 +760,6 @@ function load(){
   }catch{}
 }
 
-/* ============================================
-   Delayed rendering
-   ============================================ */
-
 let timer=null;
 
 function lazyRender(){
@@ -832,10 +779,6 @@ for(const k of stateKeys){
     lazyRender
   );
 }
-
-/* ============================================
-   Buttons
-   ============================================ */
 
 els.update.onclick=render;
 
@@ -908,10 +851,6 @@ els.copyCpp.onclick=async()=>{
     );
   }
 };
-
-/* ============================================
-   Init
-   ============================================ */
 
 load();
 render();
