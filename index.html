@@ -1,0 +1,508 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Library Copybook</title>
+<style>
+*{box-sizing:border-box}
+:root{
+  font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  color:#18181b;
+  background:#f4f4f5;
+}
+body{margin:0}
+button,input,textarea{font:inherit}
+.app{
+  display:grid;
+  grid-template-columns:minmax(360px,480px) 1fr;
+  min-height:100vh;
+}
+.panel{
+  padding:20px;
+  background:white;
+  border-right:1px solid #ddd;
+  overflow:auto;
+  height:100vh;
+  position:sticky;
+  top:0;
+}
+.panel h1{font-size:20px;margin:0 0 18px}
+label{
+  display:block;
+  font-size:12px;
+  font-weight:700;
+  margin:14px 0 5px;
+}
+input,textarea{
+  width:100%;
+  border:1px solid #ccc;
+  border-radius:6px;
+  padding:8px;
+}
+textarea{
+  resize:vertical;
+  font-family:ui-monospace,SFMono-Regular,Consolas,"Liberation Mono",monospace;
+  font-size:12px;
+  line-height:1.45;
+  tab-size:4;
+}
+#description{min-height:100px}
+#source{min-height:310px}
+#candidate{min-height:220px}
+.row{display:flex;gap:8px;align-items:end}
+.row>div{flex:1}
+button{
+  border:1px solid #bbb;
+  background:#fafafa;
+  border-radius:6px;
+  padding:8px 12px;
+  cursor:pointer;
+}
+button:hover{background:#eee}
+.primary{
+  background:#18181b;
+  color:white;
+  border-color:#18181b;
+}
+.primary:hover{background:#333}
+.buttons{
+  display:flex;
+  gap:8px;
+  margin-top:15px;
+}
+.result{
+  margin-top:12px;
+  border-radius:6px;
+  padding:10px;
+  font-size:13px;
+  white-space:pre-wrap;
+  border:1px solid #ddd;
+}
+.ok{background:#ecfdf5;border-color:#86efac}
+.ng{background:#fef2f2;border-color:#fca5a5}
+.preview-wrap{padding:25px;overflow:auto}
+.sheet{
+  width:210mm;
+  min-height:297mm;
+  margin:auto;
+  background:white;
+  box-shadow:0 2px 14px #0002;
+  padding:10mm;
+}
+.print-title{
+  font-size:20pt;
+  margin:0 0 3mm;
+}
+.meta{
+  font-family:ui-monospace,monospace;
+  font-size:8pt;
+  color:#555;
+  margin-bottom:5mm;
+}
+.description{
+  white-space:pre-wrap;
+  font-size:9.5pt;
+  line-height:1.55;
+  margin-bottom:6mm;
+}
+.code-block{
+  border-top:1px solid #bbb;
+  margin:0;
+  padding:1.2mm 0 1.8mm;
+  break-inside:avoid;
+}
+.block-head{
+  font-family:ui-monospace,SFMono-Regular,Consolas,monospace;
+  display:flex;
+  justify-content:space-between;
+  gap:8px;
+  font-size:7pt;
+  color:#555;
+  margin-bottom:.8mm;
+}
+.hash{
+  white-space:nowrap;
+  font-weight:700;
+}
+.lines{
+  font-family:ui-monospace,SFMono-Regular,Consolas,"Liberation Mono",monospace;
+  font-size:8pt;
+  line-height:1.32;
+  tab-size:4;
+}
+.code-line{
+  display:grid;
+  grid-template-columns:4.5em 1fr;
+  min-height:1.32em;
+}
+.ln{
+  text-align:right;
+  padding-right:1em;
+  color:#999;
+  user-select:none;
+}
+.src{
+  white-space:pre;
+  overflow:visible;
+}
+.code-block.bad{
+  background:#fff1f2;
+}
+.code-block.good{
+  background:#f0fdf4;
+}
+@page{
+  size:A4 portrait;
+  margin:8mm;
+}
+@media print{
+  body{background:white}
+  .panel{display:none!important}
+  .app{display:block}
+  .preview-wrap{padding:0}
+  .sheet{
+    width:auto;
+    min-height:0;
+    margin:0;
+    padding:0;
+    box-shadow:none;
+  }
+  .code-block.good,.code-block.bad{background:white}
+}
+@media(max-width:900px){
+  .app{display:block}
+  .panel{
+    height:auto;
+    position:static;
+    border-right:0;
+    border-bottom:1px solid #ddd;
+  }
+}
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="panel">
+    <h1>Library Copybook</h1>
+
+    <label>ライブラリ名</label>
+    <input id="title" value="Library Name">
+
+    <label>説明</label>
+    <textarea id="description"
+      placeholder="アルゴリズム、使い方、計算量、注意点など"></textarea>
+
+    <div class="row">
+      <div>
+        <label>チェック間隔</label>
+        <input id="blockSize" type="number" min="1" max="100" value="10">
+      </div>
+      <div>
+        <label>コード文字サイズ (pt)</label>
+        <input id="fontSize" type="number" min="5" max="14"
+               step=".25" value="8">
+      </div>
+    </div>
+
+    <label>元コード</label>
+    <textarea id="source"
+      spellcheck="false"
+      placeholder="ここにライブラリコードを貼り付け"></textarea>
+
+    <div class="buttons">
+      <button id="update">更新</button>
+      <button class="primary" id="print">印刷 / PDF</button>
+    </div>
+
+    <label>写経後コード</label>
+    <textarea id="candidate"
+      spellcheck="false"
+      placeholder="写経したコードを貼ると比較します"></textarea>
+
+    <div id="result" class="result">コードを入力してください。</div>
+  </aside>
+
+  <main class="preview-wrap">
+    <article class="sheet" id="sheet"></article>
+  </main>
+</div>
+
+<script>
+"use strict";
+
+const $=id=>document.getElementById(id);
+
+const els={
+  title:$("title"),
+  description:$("description"),
+  source:$("source"),
+  candidate:$("candidate"),
+  blockSize:$("blockSize"),
+  fontSize:$("fontSize"),
+  update:$("update"),
+  print:$("print"),
+  sheet:$("sheet"),
+  result:$("result")
+};
+
+function normalizeWhitespace(s){
+  return s.replace(/\s/gu,"");
+}
+
+function fnv1a(s){
+  let h=0x811c9dc5;
+  for(let i=0;i<s.length;i++){
+    const c=s.charCodeAt(i);
+    h^=c&255;
+    h=Math.imul(h,0x01000193);
+    h^=c>>>8;
+    h=Math.imul(h,0x01000193);
+  }
+  return h>>>0;
+}
+
+function fnvUpdate(h,s){
+  for(let i=0;i<s.length;i++){
+    const c=s.charCodeAt(i);
+    h^=c&255;
+    h=Math.imul(h,0x01000193);
+    h^=c>>>8;
+    h=Math.imul(h,0x01000193);
+  }
+  return h>>>0;
+}
+
+function hex(x){
+  return x.toString(16).toUpperCase().padStart(8,"0");
+}
+
+function escapeHTML(s){
+  return s
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;");
+}
+
+function splitLines(s){
+  s=s.replace(/\r\n?/g,"\n");
+  return s===""?[]:s.split("\n");
+}
+
+function analyze(code,blockSize){
+  const lines=splitLines(code);
+  const blocks=[];
+
+  let prefixHash=0x811c9dc5;
+  let charOffset=0;
+
+  for(let i=0;i<lines.length;i+=blockSize){
+    const part=lines.slice(i,i+blockSize);
+    const normalized=normalizeWhitespace(part.join("\n"));
+
+    prefixHash=fnvUpdate(prefixHash,normalized);
+
+    const startOffset=charOffset;
+    charOffset+=normalized.length;
+
+    blocks.push({
+      begin:i+1,
+      end:i+part.length,
+      lines:part,
+      normalized,
+      length:normalized.length,
+      startOffset,
+      endOffset:charOffset,
+      blockHash:fnv1a(normalized),
+      prefixHash
+    });
+  }
+
+  const normalized=normalizeWhitespace(code);
+
+  return {
+    lines,
+    blocks,
+    normalized,
+    fullHash:fnv1a(normalized)
+  };
+}
+
+function compare(sourceInfo,candidate){
+  const c=normalizeWhitespace(candidate);
+
+  return {
+    exact:c===sourceInfo.normalized,
+    candidateNormalized:c,
+    blocks:sourceInfo.blocks.map(b=>{
+      const x=c.slice(b.startOffset,b.endOffset);
+      return {
+        ok:x===b.normalized,
+        hash:fnv1a(x)
+      };
+    })
+  };
+}
+
+function render(){
+  const source=els.source.value;
+  const blockSize=Math.max(1,+els.blockSize.value||10);
+  const fontSize=Math.max(5,+els.fontSize.value||8);
+
+  const info=analyze(source,blockSize);
+  const hasCandidate=els.candidate.value.length>0;
+  const cmp=compare(info,els.candidate.value);
+
+  let html=`
+    <h1 class="print-title">${escapeHTML(els.title.value||"Library")}</h1>
+    <div class="meta">
+      lines: ${info.lines.length}
+      &nbsp; normalized chars: ${info.normalized.length}
+      &nbsp; HASH: ${hex(info.fullHash)}
+    </div>
+  `;
+
+  if(els.description.value){
+    html+=`
+      <section class="description">${
+        escapeHTML(els.description.value)
+      }</section>
+    `;
+  }
+
+  html+=`<section class="code" style="--code-size:${fontSize}pt">`;
+
+  info.blocks.forEach((b,bi)=>{
+    const state=hasCandidate
+      ?(cmp.blocks[bi].ok?" good":" bad")
+      :"";
+
+    html+=`
+      <section class="code-block${state}">
+        <div class="block-head">
+          <span>lines ${b.begin}-${b.end}</span>
+          <span class="hash">
+            B:${hex(b.blockHash)}
+            &nbsp;
+            P:${hex(b.prefixHash)}
+          </span>
+        </div>
+        <div class="lines" style="font-size:${fontSize}pt">
+    `;
+
+    b.lines.forEach((line,j)=>{
+      html+=`
+        <div class="code-line">
+          <span class="ln">${b.begin+j}</span>
+          <span class="src">${escapeHTML(line)||" "}</span>
+        </div>
+      `;
+    });
+
+    html+=`
+        </div>
+      </section>
+    `;
+  });
+
+  html+="</section>";
+
+  els.sheet.innerHTML=html;
+
+  renderResult(info,cmp,hasCandidate);
+  save();
+}
+
+function renderResult(info,cmp,hasCandidate){
+  if(!els.source.value){
+    els.result.className="result";
+    els.result.textContent="元コードを入力してください。";
+    return;
+  }
+
+  if(!hasCandidate){
+    els.result.className="result";
+    els.result.textContent=
+      `全体 HASH: ${hex(info.fullHash)}\n`+
+      `空白除去後: ${info.normalized.length} 文字`;
+    return;
+  }
+
+  if(cmp.exact){
+    els.result.className="result ok";
+    els.result.textContent=
+      "✓ 完全一致\n"+
+      "スペース・タブ・改行などの空白をすべて無視して一致しています。\n"+
+      `HASH: ${hex(info.fullHash)}`;
+    return;
+  }
+
+  const first=cmp.blocks.findIndex(x=>!x.ok);
+
+  els.result.className="result ng";
+
+  let msg="✗ 不一致\n";
+
+  if(first>=0){
+    const b=info.blocks[first];
+    msg+=`最初の不一致候補: ${b.begin}-${b.end} 行付近\n`;
+    msg+=`期待 B: ${hex(b.blockHash)}\n`;
+    msg+=`写経 B: ${hex(cmp.blocks[first].hash)}\n`;
+  }
+
+  msg+=
+    `元: ${info.normalized.length} chars\n`+
+    `写経: ${cmp.candidateNormalized.length} chars`;
+
+  els.result.textContent=msg;
+}
+
+const stateKeys=[
+  "title",
+  "description",
+  "source",
+  "candidate",
+  "blockSize",
+  "fontSize"
+];
+
+function save(){
+  const obj={};
+  for(const k of stateKeys)obj[k]=els[k].value;
+  localStorage.setItem("library-copybook",JSON.stringify(obj));
+}
+
+function load(){
+  try{
+    const obj=JSON.parse(
+      localStorage.getItem("library-copybook")
+    );
+    if(!obj)return;
+    for(const k of stateKeys){
+      if(obj[k]!=null)els[k].value=obj[k];
+    }
+  }catch{}
+}
+
+let timer=null;
+
+function lazyRender(){
+  clearTimeout(timer);
+  timer=setTimeout(render,100);
+}
+
+for(const k of stateKeys){
+  els[k].addEventListener("input",lazyRender);
+}
+
+els.update.onclick=render;
+els.print.onclick=()=>{
+  render();
+  window.print();
+};
+
+load();
+render();
+</script>
+</body>
+</html>
